@@ -1,0 +1,45 @@
+{
+    "name": "mudhairless/openpgp",
+    "description": "Implementation of OpenPGP for PHP",
+    "type": "library",
+	"keywords": [
+		"security",
+		"crypto",
+		"cryptography",
+        "encryption",
+        "signature",
+        "signing",
+		"gnupg",
+		"openpgp",
+		"pgp",
+		"key-pair"
+		],
+    "require": {
+		"php": ">=5.0.0",
+        "phpseclib/phpseclib": "0.3.*"
+    },
+	"require-dev": {
+		"phpunit/phpunit": "4.1.*"
+	},
+    "license": "CC0-1.0",
+    "authors": [
+        {
+            "name": "Ebben Feagan",
+            "email": "ebben.feagan@gmail.com",
+            "homepage": "http://mud.owlbox.net"
+        },
+        {
+            "name": "Arto Bendiken",
+            "email": "arto.bendiken@gmail.com"
+        },
+        {
+            "name": "Stephen Paul Weber",
+            "email": "singpolyma@singpolyma.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "OpenPGP\\": "openpgp/"
+        }
+    }
+}

@@ -1,0 +1,65 @@
+#tabs p{
+	margin: 0px;
+	padding: 0px;
+}
+
+#tabs div{
+	margin: 2px;
+	padding: 2px;
+}
+
+#tabs #myTable, 
+.lrnode_page_lrp_manage_documents #myTable,
+.lrnode_page_lrp_unsubmitted_resources #myTable{
+	width: 100%;
+}
+
+#tabs #myTable{
+	font-size: 10px;
+}
+
+#tabs #myTable td, 
+.lrnode_page_lrp_manage_documents #myTable td,
+.lrnode_page_lrp_unsubmitted_resources #myTable td{
+	vertical-align: top;
+}
+
+.lrnode_page_lrp_unsubmitted_resources #myTable td div p{
+	padding: 0px;
+	margin: 0px;
+}
+
+#poststuff #lrp_submit{
+	padding: 0px;
+	margin: 0px;
+	padding-top: 10px;
+}
+
+#lrschema{
+	margin-left: 20px;
+	width: 70%;
+}
+
+#lrnode{
+	margin-left: 35px;
+	width: 70%;
+}
+
+#lrkey{
+	margin-left: 47px;
+	width: 70%;
+}
+
+.lrfilter{
+	padding-left: 5px;
+	font-size: 10px;
+}
+
+th.header{
+	cursor: pointer;
+	cursor: hand;
+}
+
+.lrp_submit{
+	display: none;
+}

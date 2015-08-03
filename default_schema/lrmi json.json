@@ -1,0 +1,48 @@
+{
+"publisher": 
+	{
+		"url": "%PUBLISHER_LINK%", 
+		"@type": "%PUBLISHER_TYPE%", 
+		"name": "%NAME%", 
+		"email": "%EMAIL%"
+	}, 
+	"useRightsUrl": "%RIGHTS_URL%",
+	"interactivityType": "%INTERACTIVITY_TYPE%", 
+	"description": "%DESCRIPTION%", 
+	"language": "%LANGUAGE%", 
+	"author": {
+		"url": "%AUTHOR_LINK%", 
+		"@type": "%PUBLISHER_TYPE%", 
+		"name": "%NAME%"
+	}, 
+	"url": "%LINK%", 
+	"mediaType": "%MEDIA_TYPE%", 
+	"dateCreated": "%DATE%", 
+	"educationalAlignment": [
+		{
+			"alignmentType": "", 
+			"educationalFramework": "", 
+			"targetName": "9", 
+			"@type": "AlignmentObject"
+		}
+	], 
+	"learningResourceType": "", 
+	"accessibilityControl": "", 
+	"keywords": [%KEYWORDS%], 
+	"@context": [
+		{
+			"url": {"@type": "@id"}, 
+			"@vocab": "http://schema.org
+		}, 
+		{
+			"lrmi": "http://lrmi.net/the-specification#", 
+			"useRightsUrl": {
+				"@id": "lrmi:useRightsUrl", 
+				"@type": "@id"
+			}
+		}
+	], 
+	"@id": "%lINK%", 
+	"@type": "CreativeWork", 
+	"name": "%TITLE%"
+}

@@ -1,0 +1,12 @@
+<dc:title>
+	%TITLE%
+</dc:title>
+<dc:subject>
+	%KEYWORDS%
+</dc:subject>
+<dc:description>
+	%CONTENT%
+</dc:description>
+<dc:identifier>
+	%LINK%
+</dc:identifier>
