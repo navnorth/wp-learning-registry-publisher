@@ -18,8 +18,10 @@ require_once("learning-registry-publisher-key-editor.php");
 require_once("learning-registry-publisher-posts-management.php");
 require_once("learning-registry-publisher-ajax.php");
 require_once("learning-registry-publisher-submit.php");
+require_once("learning-registry-publisher-test-node.php");
 require_once("learning-registry-publisher-management-page.php");
 require_once("learning-registry-publisher-unsubmitted-management-page.php");
+require_once("learning-registry-publisher-post-columns.php");
 
 class LearningRegistryPublisher{
 
