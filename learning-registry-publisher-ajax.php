@@ -109,7 +109,7 @@ class LearningRegistryPublisherAjax{
 	
 		if(wp_verify_nonce($_REQUEST['nonce'], 'lrp_submit_js_nonce')){
 		
-			$date = date("G:i:s F, tS Y", time());
+			$date = date("G:i:s F, jS Y", time());
 			$node = get_post($_POST['node']);
 			$post = get_post($_POST['post']);
 			$key = get_post($_POST['key']);
