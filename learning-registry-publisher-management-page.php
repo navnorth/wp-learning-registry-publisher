@@ -98,7 +98,7 @@
 				$key = get_post($page->lrkey);
 				$schema = get_post($page->lrschema);
 				$user = get_userdata($page->lruser);
-				$date = date("G:i:s", $page->date_submitted);
+				$date = date("G:i:s F, jS Y", $page->date_submitted);
 								
 				echo "<tr>";
 				echo "<td>";
