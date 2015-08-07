@@ -7,7 +7,7 @@
 			add_action("admin_menu", array($this, "menu"));
 			add_action('manage_lrschema_posts_custom_column' , array($this, 'custom_columns'), 10, 2 );
 			add_filter('manage_edit-lrschema_columns', array($this, 'add_new_edit_page_columns') );
-		add_filter('posts_results', array($this, 'post_order') );
+			add_filter('posts_results', array($this, 'post_order') );
 			add_filter('the_title', array($this, 'post_title'), 10, 2 );
 		}
 		
@@ -62,8 +62,7 @@
 			$new_columns['title'] = __('Title');
 		
 		
-			$new_columns['doc_pub'] = __('Documents using schema');
-			$new_columns['doc_not_pub'] = __('Documents not using schema');
+			$new_columns['doc_pub'] = __('Documents submitted using this schema');
 			$new_columns['last_pub'] = __('Last Time Schema Used');
 			$new_columns['date'] = _x('Date', 'column name');
 		
@@ -73,17 +72,31 @@
 		}
 
 		function custom_columns( $column, $post_id ) {
+			global $wpdb;
+		
+			$querystr_posts = "
+				SELECT distinct post 
+				FROM " . $wpdb->prefix . "lrp_documents_history 
+				WHERE lrschema = ";
+				
+			$querystr_time = "
+				SELECT max(date_submitted) as last
+				FROM " . $wpdb->prefix . "lrp_documents_history 
+				WHERE lrschema = ";
+				
 			switch ( $column ) {
 				case 'doc_pub':
-					echo time();
-					break;
-					
-				case 'doc_not_pub':
-					echo time();
+					$pageposts = $wpdb->get_results($querystr_posts . $post_id, OBJECT);
+					echo count($pageposts);
 					break;
 
 				case 'last_pub':
-					echo time();
+					$pageposts = $wpdb->get_results($querystr_time . $post_id, OBJECT);
+					if($pageposts[0]->last!=""){
+						echo date("G:i:s F, jS Y", $pageposts[0]->last);
+					}else{
+						echo "Never used";
+					}
 					break;
 			}
 		}
@@ -120,6 +133,23 @@
 			);
 		
 			register_post_type( 'LRSchema' , $args );
+			
+			if(!get_option("lrp_default_schema")){
+				$dir = opendir(dirname(__FILE__) . "/default_schema");
+				while($file = readdir($dir)){
+					if($file!="."&&$file!=".."){
+						$post = array(
+							'post_content'   => file_get_contents(dirname(__FILE__) . "/default_schema/" . $file),
+							'post_name'      => strtoupper(substr($file, 0, strpos($file, "."))),
+							'post_title'     => strtoupper(substr($file, 0, strpos($file, "."))),
+							'post_status'    => 'draft',
+							'post_type'      => 'lrschema'
+						);
+						wp_insert_post($post);
+					}
+				}
+				update_option("lrp_default_schema", true);
+			}
 
 		}	
 	
