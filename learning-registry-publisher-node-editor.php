@@ -6,8 +6,48 @@
 			add_action( 'admin_head', array($this, 'prepare_editor') );	  	  
 			add_action( "draft_lrnode", array($this, "save_node") );
 			add_action( "publish_lrnode", array($this, "save_node") );
+			add_action( "publish_lrnode", array($this, "test_node") );
+			add_action( "admin_notices", array($this, "test_results") );
 			add_action( "trash_lrnode", array($this, "trash_node") );
 			add_filter( 'enter_title_here', array($this, 'custom_enter_title') );
+		}
+		
+		function test_results(){
+			global $post;
+			$results = unserialize(get_post_meta($post->ID, "lr_services",true));
+			if($results){
+				if($results[0]){
+					echo "<div class='updated'> Node has the following services :- <ul>";
+					foreach($results[1] as $service){
+						echo "<li>" . $service . "</li>";
+					}
+					echo "</ul></div>"; 
+				}else{
+					echo"<div class='error'> <p>" . $results[1] . "</p></div>"; 
+				}
+				delete_post_meta($post->ID, "lr_services");
+			}
+		}
+		
+		function test_node($post_id){
+			$LearningRegistryPublisherTestNode = new LearningRegistryPublisherTestNode();
+			$connection = $LearningRegistryPublisherTestNode->test_node($_POST['lrnode_url']);
+			if ($connection->LR->checkNode()) {
+				if ($connection->LR->checkNodeActive()) {
+					$connection->LR->servicesService();
+					$connection->LR->listServices();
+					$services = $connection->LR->getServices();
+					if(is_array($services)){
+						update_post_meta($post_id, "lr_services", serialize(array(true, $services)));
+					}else{
+						update_post_meta($post_id, "lr_services", serialize(array(false, "Services list error")));
+					}
+				}else{
+					update_post_meta($post_id, "lr_services", serialize(array(false, "Node Not active")));
+				}
+			}else{
+				update_post_meta($post_id, "lr_services", serialize(array(false, "Node failed")));
+			}
 		}
 		
 		function custom_enter_title( $input ) {
