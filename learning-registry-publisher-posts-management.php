@@ -307,6 +307,7 @@
 					
 					}
 					
+					
 					if(get_option("lrschema_default")){
 					
 						if(current_user_can("LearningRegistryPublisherOverrideDefaults")){
