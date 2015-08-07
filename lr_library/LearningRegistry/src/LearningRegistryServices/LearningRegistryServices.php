@@ -18,6 +18,13 @@ class LearningRegistryServices extends LearningRegistryDefault
         }
     
     }
+	
+	public function getServices()
+    {
+    
+        return $this->services;
+    
+    }
     
     public function servicesService()
     {
