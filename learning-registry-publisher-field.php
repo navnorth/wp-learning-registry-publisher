@@ -17,9 +17,7 @@
 			$new_columns['title'] = __('Title');
 		
 		
-			$new_columns['doc_pub'] = __('Documents using this field');
-			$new_columns['doc_not_pub'] = __('Documents using this field');
-			$new_columns['last_pub'] = __('Last time field published');
+			$new_columns['doc_pub'] = __('Schemas using this field');
 			$new_columns['date'] = _x('Date', 'column name');
 		
 	
@@ -28,17 +26,23 @@
 		}
 
 		function custom_columns( $column, $post_id ) {
+		
+			global $wpdb;
+		
 			switch ( $column ) {
 				case 'doc_pub':
-					echo time();
-					break;
 					
-				case 'doc_not_pub':
-					echo time();
-					break;
-
-				case 'last_pub':
-					echo time();
+					$querystr = "
+						SELECT ID 
+						FROM " . $wpdb->prefix . "posts 
+						WHERE post_status = 'publish'
+						AND post_content LIKE '%$$$%'";
+					$pageposts = $wpdb->get_results(str_replace("$$$", "%" . strtoupper(get_the_title($post_id)) . "%", $querystr), OBJECT);
+					echo count($pageposts) . "<br />";
+					foreach($pageposts as $post){
+						echo "<a href='post.php?post=" . $post->ID . "&action=edit'>" . get_the_title($post->ID) . "</a><br />";
+					}
+					
 					break;
 			}
 		}
