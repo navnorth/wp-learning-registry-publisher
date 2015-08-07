@@ -62,8 +62,7 @@
 			$new_columns['title'] = __('Title');
 		
 		
-			$new_columns['doc_pub'] = __('Documents using this key');
-			$new_columns['doc_not_pub'] = __('Documents not using this key');
+			$new_columns['doc_pub'] = __('Documents submitted using this key');
 			$new_columns['last_pub'] = __('Last Time key Used');
 			$new_columns['date'] = _x('Date', 'column name');
 		
@@ -71,21 +70,36 @@
 			return $new_columns;
 			
 		}
-		
+
 		function custom_columns( $column, $post_id ) {
+			global $wpdb;
+		
+			$querystr_posts = "
+				SELECT distinct post 
+				FROM " . $wpdb->prefix . "lrp_documents_history 
+				WHERE lrkey = ";
+				
+			$querystr_time = "
+				SELECT max(date_submitted) as last
+				FROM " . $wpdb->prefix . "lrp_documents_history 
+				WHERE lrschema = ";
+				
 			switch ( $column ) {
 				case 'doc_pub':
-					echo time();
-					break;
-					
-				case 'doc_not_pub':
-					echo time();
+					$pageposts = $wpdb->get_results($querystr_posts . $post_id, OBJECT);
+					echo count($pageposts);
 					break;
 
 				case 'last_pub':
-					echo time();
+					$pageposts = $wpdb->get_results($querystr_time . $post_id, OBJECT);
+					if($pageposts[0]->last!=""){
+						echo date("G:i:s F, jS Y", $pageposts[0]->last);
+					}else{
+						echo "Never used";
+					}
 					break;
 			}
+			
 		}
 		
 		function create(){
