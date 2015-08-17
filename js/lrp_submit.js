@@ -55,8 +55,10 @@ function lrp_submit(post, user, get_data, single_post){
 	}
 	
 	jQuery.post(lrp_submit_ajax.ajaxurl, data, function(response) {
+	
+		console.log(response);
+	
 		if(single_post){
-			console.log(response);
 			data = jQuery.parseJSON( response );
 			if(data.error==undefined){
 				console.log(data);
