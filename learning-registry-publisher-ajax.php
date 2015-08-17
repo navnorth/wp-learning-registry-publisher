@@ -55,10 +55,8 @@ class LearningRegistryPublisherAjax{
 		
 			$submit = new LearningRegistryPublisherSubmit();
 			$node = get_post($_POST['node']);
+			$key = get_post($_POST['key']);
 			$signing = false;
-			if(get_post_meta($node->ID, "lrnode_sign")=="on"){
-				$signing = true;
-			}
 			
 			$submit->update_initialise(
 													get_post_meta($node->ID, "lrnode_url", true), 
@@ -72,11 +70,19 @@ class LearningRegistryPublisherAjax{
 															$_POST['lrdocid']
 														)
 													);
-													
-			$submit->LRDocument->populateDocument($submit->LR);
-
+			
+			if(get_post_meta($node->ID, "lrnode_sign", true)=="on"){
+				$signing = true;
+				$key_post = get_post($key->ID);
+				$submit->LRConfig->setPublicKeyPath(get_post_meta($key->ID, "lrkey_url", true));
+				$submit->LRConfig->setPassphrase(get_post_meta($key->ID, "lrkey_passphrase", true));
+				$submit->LRConfig->setKeyContents($key_post->post_content);
+			}
+			
 			$schema = get_post($_POST['schema']);
 			$this->prepare_schema($_POST['post'], $schema);
+			$post = get_post($_POST['post']);
+			
 			$submit->LR->setResFields(
 				array(
 				'payload_schema' => array(get_post_meta($schema->ID, "lrschema_payload", true)), 
@@ -86,18 +92,42 @@ class LearningRegistryPublisherAjax{
 				'replaces' => $_POST['lrdocid']
 				)
 			);
+			
+			$submit->LR->setIdFields(
+				array(
+				'curator' => get_post_meta($node->ID, "lrnode_doccurator", true),
+				'owner' => get_post_meta($node->ID, "lrnode_docowner", true),
+				'signer' => get_post_meta($key->ID, "lrkey_signer", true),
+				'submitter_type' => get_post_meta($node->ID, "lrnode_docsubmittertype", true),
+				'submitter' => get_post_meta($node->ID, "lrnode_docsubmitter", true)
+				)
+			);
+			
 			$submit->LR->createDocument();
+			
+			print_r($submit->LR->getResourceData());
+			//die();
+			
+			if($signing){
+				$submit->LR->signDocument();
+			}
+			
+			if($signing){
+				$submit->LR->verifySignedDocument();
+			}
 			
 			if ($submit->LR->verifyUpdatedDocument()) {
 				$submit->LR->finaliseDocument();
 				$submit->LR->UpdateService();
-				if ($submit->LR->getOK()!="1") {
-					echo "the Error is " . $submit->LR->getError() . "<br />";
+				if ($submit->LR->getDocumentOK()!="1") {
+					echo json_encode( array("error" => $submit->LR->getError() ) );
 				} else {
+					print_r($submit->LR->getResponse());
+					echo "****" . $submit->LR->getDocID() . "*****";
 					$this->update_response($submit->LR->getDocID(), $node, $key, $schema, $user, $date);
 				}
 			}else{
-				print_r($submit->LR->errors);
+				echo json_encode( array("error" => $submit->LR->errors ) );
 			}
 		}
 		
@@ -116,10 +146,6 @@ class LearningRegistryPublisherAjax{
 			$schema = get_post($_POST['schema']);
 			$this->prepare_schema($_POST['post'], $schema);
 			$submit = new LearningRegistryPublisherSubmit();
-			$signing = false;
-			if(get_post_meta($node->ID, "lrnode_sign")=="on"){
-				$signing = true;
-			}
 			$submit->initialise( 
 									get_post_meta($node->ID, "lrnode_url", true), 
 									get_post_meta($node->ID, "lrnode_username", true), 
@@ -128,6 +154,14 @@ class LearningRegistryPublisherAjax{
 									$signing,
 									get_post_meta($node->ID, "lrnode_oauthsig")
 								);
+			$signing = false;
+			if(get_post_meta($node->ID, "lrnode_sign", true)=="on"){
+				$signing = true;
+				$key_post = get_post($key->ID);
+				$submit->LRConfig->setPublicKeyPath(get_post_meta($key->ID, "lrkey_url", true));
+				$submit->LRConfig->setPassphrase(get_post_meta($key->ID, "lrkey_passphrase", true));
+				$submit->LRConfig->setKeyContents($key_post->post_content);
+			}
 			$submit->LRDocument->setIdFields(
 				array(
 				'curator' => get_post_meta($node->ID, "lrnode_doccurator", true),
@@ -146,17 +180,29 @@ class LearningRegistryPublisherAjax{
 				'resource_data' => htmlspecialchars_decode($this->content), 
 				)
 			);
+			
 			$submit->LR->createDocument();
+			
+			print_r($submit->LR->getResourceData());
+			
+			if($signing){
+				$submit->LR->signDocument();
+			}
+			
+			if($signing){
+				$submit->LR->verifySignedDocument();
+			}
+			
 			if ($submit->LR->verifyDocument()) {
 				$submit->LR->finaliseDocument();
 				$submit->LR->PublishService();
-				if ($submit->LR->getOK()!="1") {
-					echo "the Error is " . $submit->LR->getError() . "<br />";
+				if ($submit->LR->getDocumentOK()!="1") {
+					echo json_encode( array("error" => $submit->LR->getError() ) );
 				} else {
 					$this->prepare_response($submit->LR->getDocID(), $node, $key, $schema, $user, $date);
 				}
 			}else{
-				print_r($submit->LR->errors);
+				echo json_encode( array("error" => $submit->LR->errors ) );
 			}
 		
 		}
@@ -256,8 +302,7 @@ class LearningRegistryPublisherAjax{
 		);
 		
 	}
-	
-	
+		
 	function prepare_response($lr_doc_id, $node, $key, $schema, $user, $date){
 			
 		$user = $_POST['user'];
