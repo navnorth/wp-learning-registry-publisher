@@ -43,11 +43,12 @@
 			
 			?>
 			<p>Passphrase</p>
-			<input type="password" name="lrkey_passphrase" value="<?PHP echo get_post_meta($post->ID, "lrkey_passphrase", true); ?>" />
+			<input type="password" style="width:100%" name="lrkey_passphrase" value="<?PHP echo get_post_meta($post->ID, "lrkey_passphrase", true); ?>" />
+			<p>Public Key URL</p>
+			<input type="text" name="lrkey_url" style="width:100%" value="<?PHP echo get_post_meta($post->ID, "lrkey_url", true); ?>" />
 			<p>Signer email</p>
-			<input type="password" name="lrkey_signer" value="<?PHP echo get_post_meta($post->ID, "lrkey_signer", true); ?>" />
+			<input type="text" name="lrkey_signer" style="width:100%" value="<?PHP echo get_post_meta($post->ID, "lrkey_signer", true); ?>" />
 			<p>Default Key <input type="checkbox" name="lrkey_default"  <?PHP if(get_option("lrkey_default")==$post->ID){ echo " checked "; } ?>  /></p>
-			<p>Passphrase can be left blank and entered when signing occurs</p>
 			<?PHP
 		
 		}
@@ -68,6 +69,7 @@
 		
 		function save_key($post_id){
 			update_post_meta($post_id, "lrkey_passphrase", $_POST['lrkey_passphrase']);
+			update_post_meta($post_id, "lrkey_url", $_POST['lrkey_url']);
 			update_post_meta($post_id, "lrkey_signer", $_POST['lrkey_signer']);
 			if($_POST['lrkey_default']=="on"){
 				update_option("lrkey_default", $post_id);
