@@ -1,0 +1,6 @@
+[submodule "lr_code/LRphpLib"]
+	path = lr_code/LRphpLib
+	url = git://github.com/navnorth/LRphpLib.git
+[submodule "LRphpLib"]
+	path = LRphpLib
+	url = git://github.com/navnorth/LRphpLib.git
