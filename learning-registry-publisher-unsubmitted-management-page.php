@@ -32,7 +32,7 @@
 			
 			if(current_user_can("LearningRegistryPublisherOverrideDefaults")){
 				?>
-			<a id="lrp_document_show" href="javascript:lrp_submit_options();">Show Submission Options</a>
+			<a id="lrp_document_show" class='button button-primary button-large' href="javascript:lrp_submit_options();">Show Submission Options</a>
 				<?PHP
 			}
 		
@@ -48,7 +48,8 @@
 				$filter = true;
 			}
 				
-			$querystr .= "order by " . $wpdb->prefix . "posts.ID desc
+			$querystr .= "	and " . $wpdb->prefix . "posts.post_type != 'nav_menu_item'
+							order by " . $wpdb->prefix . "posts.ID desc
 							limit 99999";
 			
 			$pageposts = $wpdb->get_results($querystr, OBJECT);
