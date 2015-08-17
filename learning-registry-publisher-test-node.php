@@ -4,8 +4,8 @@
 
 		function test_node($url){
 		
-			require dirname(__FILE__) . "/lr_library/vendor/autoload.php";
-			require dirname(__FILE__) . "/lr_library/Psr4AutoloaderClass.php";
+			require dirname(__FILE__) . "/LRphpLib/vendor/autoload.php";
+			require dirname(__FILE__) . "/LRphpLib/Psr4AutoloaderClass.php";
 
 			$config = array();
 			$config['url'] = $url;
