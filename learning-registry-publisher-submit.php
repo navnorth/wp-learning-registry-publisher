@@ -4,8 +4,10 @@
 
 		function update_initialise($url, $username, $https, $password, $auth = NULL, $oauthSignature = NULL, $data){
 		
-			require dirname(__FILE__) . "/lr_library/vendor/autoload.php";
-			require dirname(__FILE__) . "/lr_library/Psr4AutoloaderClass.php";
+			require dirname(__FILE__) . "/LRphpLib/vendor/autoload.php";
+			require dirname(__FILE__) . "/LRphpLib/Psr4AutoloaderClass.php";
+	
+			$this->loader = $loader;
 
 			$config = array();
 			$config['url'] = $url;
@@ -22,16 +24,21 @@
 			}
 			
 			$this->LRConfig = new LearningRegistry\LearningRegistryConfig($config);
+			$this->LRConfig->setLoader($this->loader);
+	
 			$this->LR = new LearningRegistry\LearningRegistryServices\LearningRegistryUpdate($this->LRConfig);
-			$this->LRDocument = new LearningRegistry\LearningRegistryDocuments\LearningRegistryReplaceDocument($data);
+			$this->LRDocument = new LearningRegistry\LearningRegistryDocuments\LearningRegistryReplaceDocument(array($url, $_REQUEST['lrdocid']));
+			$this->LRDocument->emptyDocument($this->LR);
 			return $this;
 		
 		}
 
 		function initialise($url, $username, $https, $password, $auth = NULL, $oauthSignature = NULL){
 		
-			require dirname(__FILE__) . "/lr_library/vendor/autoload.php";
-			require dirname(__FILE__) . "/lr_library/Psr4AutoloaderClass.php";
+			require dirname(__FILE__) . "/LRphpLib/vendor/autoload.php";
+			require dirname(__FILE__) . "/LRphpLib/Psr4AutoloaderClass.php";
+			
+			$this->loader = $loader;
 
 			$config = array();
 			$config['url'] = $url;
@@ -48,6 +55,9 @@
 			}
 
 			$this->LRConfig = new LearningRegistry\LearningRegistryConfig($config);
+			
+			$this->LRConfig->setLoader($this->loader);
+			
 			$this->LR = new LearningRegistry\LearningRegistryServices\LearningRegistryPublish($this->LRConfig);
 			$this->LRDocument = new LearningRegistry\LearningRegistryDocuments\LearningRegistryDCMetadata($this->LR);
 			$this->LRDocument->create();
