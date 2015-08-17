@@ -166,7 +166,9 @@
 								}
 								echo " to <a href='post.php?post=" . $node->ID . "&action=edit'>" . $node->post_title . "</a> | <a href='https://" . get_post_meta($node->ID, "lrnode_url", true) . "/obtain?request_id=" . $page->lrdocid . "&by_doc_ID=T'>" . get_post_meta($node->ID, "lrnode_url", true) . "</a>) on " . $date;
 								echo "</p>";
-								echo "<a class='button button-primary button-large' onclick='javascript:lrp_update(" . $this_post, ", " . $node->ID . ", " . $key->ID . ", " . $schema->ID . ", " . $current_user->ID . ", \"" . $page->lrdocid . "\")'>Update Document</a>";
+								if($key->ID!=0){
+									echo "<a class='button button-primary button-large' onclick='javascript:lrp_update(" . $this_post, ", " . $node->ID . ", " . $key->ID . ", " . $schema->ID . ", " . $current_user->ID . ", \"" . $page->lrdocid . "\")'>Update Document</a>";
+								}
 								echo "</div><div id='tabs-2'>";
 								?><table id="myTable" class="tablesorter"> 
 									<thead> 
@@ -237,7 +239,10 @@
 							}
 							echo "</td>";
 							echo "<td>" . $date . "</td>";
-							echo "<td><a class='button button-primary button-large' onclick='javascript:lrp_update(" . $this_post, ", " . $node->ID . ", " . $key->ID . ", " . $schema->ID . ", " . $current_user->ID . ", " . $page->lrdocid . " )'>Update Document</a></td>";
+							echo "<td>";
+							if($key->ID!=0){
+								echo "<a class='button button-primary button-large' onclick='javascript:lrp_update(" . $this_post, ", " . $node->ID . ", " . $key->ID . ", " . $schema->ID . ", " . $current_user->ID . ", \"" . $page->lrdocid . "\" )'>Update Document</a></td>";
+							}
 							echo "</tr>";
 								
 						}
@@ -374,7 +379,7 @@
 								foreach($posts as $post){
 									?><option <?PHP if(get_option("lrkey_default")==$post->ID){ echo " selected='true' "; } ?> value="<?PHP echo $post->ID; ?>"><?PHP echo $post->post_title; ?></option><?PHP
 								}
-								?></select></p><?PHP
+								?></select></p><p>If you don't select a key it will be an unsigned submission</p><?PHP
 							
 							}else{
 								?><input id="lrkey" type="hidden" value="<?PHP echo get_option("lrkey_default"); ?>" /><?PHP
@@ -396,7 +401,7 @@
 								foreach($posts as $post){
 									?><option value="<?PHP echo $post->ID; ?>"><?PHP echo $post->post_title; ?></option><?PHP
 								}
-								?></select></p><?PHP
+								?></select></p><p>If you don't select a key it will be an unsigned submission</p><?PHP
 						
 						}
 						
