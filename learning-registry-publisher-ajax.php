@@ -89,7 +89,7 @@ class LearningRegistryPublisherAjax{
 				'resource_locator' => $post->guid, 
 				'keys' => $this->keywords, 
 				'resource_data' => htmlspecialchars_decode($this->content), 
-				'replaces' => $_POST['lrdocid']
+				'replaces' => array($_POST['lrdocid'])
 				)
 			);
 			
@@ -105,9 +105,6 @@ class LearningRegistryPublisherAjax{
 			
 			$submit->LR->createDocument();
 			
-			print_r($submit->LR->getResourceData());
-			//die();
-			
 			if($signing){
 				$submit->LR->signDocument();
 			}
@@ -122,8 +119,6 @@ class LearningRegistryPublisherAjax{
 				if ($submit->LR->getDocumentOK()!="1") {
 					echo json_encode( array("error" => $submit->LR->getError() ) );
 				} else {
-					print_r($submit->LR->getResponse());
-					echo "****" . $submit->LR->getDocID() . "*****";
 					$this->update_response($submit->LR->getDocID(), $node, $key, $schema, $user, $date);
 				}
 			}else{
@@ -272,7 +267,11 @@ class LearningRegistryPublisherAjax{
 		}
 		$response->publish .= "</td>";
 		$response->publish .= "<td>" . $date . "</td>";
-		$response->publish .= "</tr>";
+		$response->publish .= "<td>";
+		if($key->ID!=0){
+			$response->publish .= "<a class='button button-primary button-large' onclick='javascript:lrp_update(" . $_POST['post'] . ", " . $node->ID . ", " . $key->ID . ", " . $schema->ID . ", " . $current_user->ID . ", \"" . $lr_doc_id . "\" )'>Update Document</a>";
+		}
+		$response->publish .= "</td></tr>";
 		print_r(json_encode($response));
 
 		global $wpdb;
@@ -363,7 +362,11 @@ class LearningRegistryPublisherAjax{
 			}
 			$response->publish .= "</td>";
 			$response->publish .= "<td>" . $date . "</td>";
-			$response->publish .= "</tr>";
+			$response->publish .= "<td>";
+			if($key->ID!=0){
+				$response->publish .= "<a class='button button-primary button-large' onclick='javascript:lrp_update(" . $_POST['post'] . ", " . $node->ID . ", " . $key->ID . ", " . $schema->ID . ", " . $current_user->ID . ", \"" . $lr_doc_id . "\" )'>Update Document</a>";
+			}
+			$response->publish .= "</td></tr>";
 			print_r(json_encode($response));
 		}
 		
