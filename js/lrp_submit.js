@@ -10,11 +10,12 @@ function lrp_update(post, node, key, schema, user, lrdocid){
 		user: user,
 		nonce: lrp_submit_ajax.answerNonce
 	};
+
+	jQuery("html").css( 'cursor', 'wait' );
 	
 	jQuery.post(lrp_submit_ajax.ajaxurl, data, function(response) {
 		console.log(response);
 		data = jQuery.parseJSON( response );
-		console.log(data);
 		if(data.error==undefined){
 			jQuery("#lrp_last_publish").html(data.last);
 			console.log(jQuery("#myTable")
@@ -30,6 +31,9 @@ function lrp_update(post, node, key, schema, user, lrdocid){
 		}else{
 			alert(data.error);
 		}
+		
+		jQuery("html").css( 'cursor', 'pointer' );
+		
 	});
 	
 }
@@ -54,6 +58,8 @@ function lrp_submit(post, user, get_data, single_post){
 		data.node = jQuery("#lrnode_" + post).val();
 	}
 	
+	jQuery("html").css( 'cursor', 'wait' );
+	
 	jQuery.post(lrp_submit_ajax.ajaxurl, data, function(response) {
 	
 		console.log(response);
@@ -61,7 +67,6 @@ function lrp_submit(post, user, get_data, single_post){
 		if(single_post){
 			data = jQuery.parseJSON( response );
 			if(data.error==undefined){
-				console.log(data);
 				jQuery("#lrp_last_publish").html(data.last);
 				if(jQuery("#myTable").children().first().next().children().size()==1){
 					jQuery("#myTable").children().first().next().html("");
@@ -78,6 +83,9 @@ function lrp_submit(post, user, get_data, single_post){
 			jQuery("#lrp_document_" + post)
 				.remove();
 		}
+		
+		jQuery("html").css( 'cursor', 'pointer' );
+		
 	});
 	
 }
