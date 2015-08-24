@@ -9,6 +9,13 @@
 			add_filter('manage_edit-lrkey_columns', array($this, 'add_new_edit_page_columns') );
 			add_filter('posts_results', array($this, 'post_order') );
 			add_filter('the_title', array($this, 'post_title'), 10, 2 );
+			add_filter('post_updated_messages', array($this, 'update_messages') );
+		}
+		
+		function update_messages($messages){
+			unset($messages['post'][1]);
+			unset($messages['post'][6]);
+			return $messages;
 		}
 		
 		function post_title( $title, $id = null ) {
@@ -82,7 +89,7 @@
 			$querystr_time = "
 				SELECT max(date_submitted) as last
 				FROM " . $wpdb->prefix . "lrp_documents_history 
-				WHERE lrschema = ";
+				WHERE lrkey = ";
 				
 			switch ( $column ) {
 				case 'doc_pub':
