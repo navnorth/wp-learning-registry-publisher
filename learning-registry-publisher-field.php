@@ -7,6 +7,13 @@
 			add_action("admin_menu", array($this, "menu"));
 			add_action('manage_lrfield_posts_custom_column' , array($this, 'custom_columns'), 10, 2 );
 			add_filter('manage_edit-lrfield_columns', array($this, 'add_new_edit_page_columns') );
+			add_filter('post_updated_messages', array($this, 'update_messages') );
+		}
+		
+		function update_messages($messages){
+			unset($messages['post'][1]);
+			unset($messages['post'][6]);
+			return $messages;
 		}
 
 		function add_new_edit_page_columns($gallery_columns) {
