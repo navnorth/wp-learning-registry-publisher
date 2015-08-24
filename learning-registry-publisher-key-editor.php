@@ -1,4 +1,4 @@
-<?PHP
+<?PHP	
 
 	class LearningRegistryPublisherKeyEditor{
 	
@@ -7,8 +7,10 @@
 			add_filter( 'quicktags_settings', array($this, 'remove_buttons'));
 			add_filter( 'enter_title_here', array($this, 'custom_enter_title') );
 			add_action( "draft_lrkey", array($this, "save_key") );
+			add_action( "publish_lrkey", array($this, "test_key") );
 			add_action( "publish_lrkey", array($this, "save_key") );
 			add_action( "trash_key", array($this, "trash_key") );
+			add_action( "admin_notices", array($this, "test_results") );
 		}
 		
 		function custom_enter_title( $input ) {
@@ -65,6 +67,48 @@
 				}
 			}
 			return $qt;
+		}
+		
+		function test_results(){
+			global $post;
+			$results = get_post_meta($post->ID, "lr_services",true);
+			if($results){
+				echo "<div class='updated'> Key saving led to the following errors :- ";
+				echo $results;
+				echo "</div>"; 
+				delete_post_meta($post->ID, "lr_services");
+			}
+		}
+		
+		function test_key( ){
+		
+			$errors = "";
+		
+			if($_POST['content']==""){
+				$errors .= "<p>Key must have content</p>";
+			}
+		
+			if($_POST['lrkey_passphrase']==""){
+				$errors .= "<p>Passphrase must be set</p>";
+			}
+		
+			if($_POST['lrkey_url']==""){
+				$errors .= "<p>Public key location</p>";
+			}
+			
+			if($_POST['lrkey_signer']==""){
+				$errors .= "<p>Signer must be set</p>";
+			}
+			
+			if(trim($errors)!=""){
+				update_post_meta($_POST['post_ID'], "lr_services", $errors);
+				$post = array(
+					'ID'           => $_POST['post_ID'],
+					'post_status'   => 'draft',
+				);
+				wp_update_post( $post );
+			}
+				
 		}
 		
 		function save_key($post_id){
