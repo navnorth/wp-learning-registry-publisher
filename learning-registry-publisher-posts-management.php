@@ -410,35 +410,7 @@
 					}
 					
 					$current_user = wp_get_current_user();
-
-					$args = array(
-								'posts_per_page'   => 9999999,
-								'orderby'          => 'post_title',
-								'order'            => 'ASC',
-								'post_type'        => 'lrnode',
-								'post_status'      => 'publish',
-								'suppress_filters' => true 
-							);
-					$nodes = get_posts( $args );
-					$args = array(
-								'posts_per_page'   => 9999999,
-								'orderby'          => 'post_title',
-								'order'            => 'ASC',
-								'post_type'        => 'lrschema',
-								'post_status'      => 'publish',
-								'suppress_filters' => true 
-							);
-					$schemas = get_posts( $args );
-					
-					if(count($nodes)!=0 && count($schemas)!=0){
-
-						echo "<a class='button button-primary button-large' onclick='javascript:lrp_submit(" . $this_post, ", " . $current_user->ID . ", false, true)'>Submit Document</a>";
-
-					}else{
-
-						echo "You need to create a node and a schema before publishing";
-			
-					}
+					echo "<a class='button button-primary button-large' onclick='javascript:lrp_submit(" . $this_post, ", " . $current_user->ID . ", false, true)'>Submit Document</a>";
 				}
 				
 			}
