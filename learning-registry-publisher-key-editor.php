@@ -31,10 +31,12 @@
 				}
 			}else{
 				global $post;
-				if($post->post_type=="lrkey"){
-					remove_action( 'media_buttons', 'media_buttons' );
-					add_filter( 'user_can_richedit' , '__return_false', 50 );				
-					add_meta_box( "lrkey", __("Key Passphrase"), array($this, "editor_meta_box"), "lrkey");
+				if(isset($post)){
+					if($post->post_type=="lrkey"){
+						remove_action( 'media_buttons', 'media_buttons' );
+						add_filter( 'user_can_richedit' , '__return_false', 50 );				
+						add_meta_box( "lrkey", __("Key Passphrase"), array($this, "editor_meta_box"), "lrkey");
+					}
 				}
 			}
 		}
@@ -71,12 +73,14 @@
 		
 		function test_results(){
 			global $post;
-			$results = get_post_meta($post->ID, "lr_services",true);
-			if($results){
-				echo "<div class='updated'> Key saving led to the following errors :- ";
-				echo $results;
-				echo "</div>"; 
-				delete_post_meta($post->ID, "lr_services");
+			if(isset($post)){
+				$results = get_post_meta($post->ID, "lr_services",true);
+				if($results){
+					echo "<div class='updated'> Key saving led to the following errors :- ";
+					echo $results;
+					echo "</div>"; 
+					delete_post_meta($post->ID, "lr_services");
+				}
 			}
 		}
 		

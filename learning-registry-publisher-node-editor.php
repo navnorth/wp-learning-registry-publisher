@@ -14,18 +14,20 @@
 		
 		function test_results(){
 			global $post;
-			$results = unserialize(get_post_meta($post->ID, "lr_services",true));
-			if($results){
-				if($results[0]){
-					echo "<div class='updated'> Node has the following services :- <ul>";
-					foreach($results[1] as $service){
-						echo "<li>" . $service . "</li>";
+			if(isset($post)){
+				$results = unserialize(get_post_meta($post->ID, "lr_services",true));
+				if($results){
+					if($results[0]){
+						echo "<div class='updated'> Node has the following services :- <ul>";
+						foreach($results[1] as $service){
+							echo "<li>" . $service . "</li>";
+						}
+						echo "</ul></div>"; 
+					}else{
+						echo"<div class='error'> <p>" . $results[1] . "</p></div>"; 
 					}
-					echo "</ul></div>"; 
-				}else{
-					echo"<div class='error'> <p>" . $results[1] . "</p></div>"; 
+					delete_post_meta($post->ID, "lr_services");
 				}
-				delete_post_meta($post->ID, "lr_services");
 			}
 		}
 		
@@ -66,8 +68,10 @@
 				}
 			}else{
 				global $post;
-				if($post->post_type=="lrnode"){
-					add_meta_box( "lrnode", __("Edit an existing Learning Registry Node"), array($this, "editor_meta_box"), "lrnode");
+				if(isset($post)){	
+					if($post->post_type=="lrnode"){
+						add_meta_box( "lrnode", __("Edit an existing Learning Registry Node"), array($this, "editor_meta_box"), "lrnode");
+					}
 				}
 			}
 		}

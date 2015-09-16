@@ -21,14 +21,16 @@
 				}
 			}else{
 				global $post;
-				if(strpos($post->post_type,"lr")!==0){
-					if(current_user_can("LearningRegistryPublisherHistory") || current_user_can("LearningRegistryPubliisherManageDocument")){
-						wp_enqueue_script("jquery");
-						wp_enqueue_script("jquery-ui-tabs");
-						wp_enqueue_script('lrp_tabs', plugins_url('/js/lrp_tabs.js', __FILE__), array('jquery'), '1.0.0', true );
-						wp_enqueue_script( 'lrp_table_sort', plugins_url('/js/jquery.tablesorter.min.js', __FILE__), array("jquery"), '1.0.0', true );
-						wp_enqueue_style('lrp_tabs_css', plugins_url('/css/lrp_tabs.css', __FILE__));
-						wp_enqueue_style('lrp-tabs-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/smoothness/jquery-ui.css', false, PLUGIN_VERSION, false);
+				if(isset($post)){
+					if(strpos($post->post_type,"lr")!==0){
+						if(current_user_can("LearningRegistryPublisherHistory") || current_user_can("LearningRegistryPubliisherManageDocument")){
+							wp_enqueue_script("jquery");
+							wp_enqueue_script("jquery-ui-tabs");
+							wp_enqueue_script('lrp_tabs', plugins_url('/js/lrp_tabs.js', __FILE__), array('jquery'), '1.0.0', true );
+							wp_enqueue_script( 'lrp_table_sort', plugins_url('/js/jquery.tablesorter.min.js', __FILE__), array("jquery"), '1.0.0', true );
+							wp_enqueue_style('lrp_tabs_css', plugins_url('/css/lrp_tabs.css', __FILE__));
+							wp_enqueue_style('lrp-tabs-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/smoothness/jquery-ui.css', false, '', false);
+						}
 					}
 				}
 			}
@@ -43,9 +45,11 @@
 				}
 			}else{
 				global $post;
-				if(strpos($post->post_type,"lr")!==0){
-					if(current_user_can("LearningRegistryPublisherHistory") || current_user_can("LearningRegistryPubliisherManageDocument")){
-						add_meta_box( "lrmanage", __("Learning Registry Document History"), array($this, "editor_meta_box"));
+				if(isset($post)){
+					if(strpos($post->post_type,"lr")!==0){
+						if(current_user_can("LearningRegistryPublisherHistory") || current_user_can("LearningRegistryPubliisherManageDocument")){
+							add_meta_box( "lrmanage", __("Learning Registry Document History"), array($this, "editor_meta_box"));
+						}
 					}
 				}
 			}
@@ -101,8 +105,6 @@
 
 					$pageposts = $wpdb->get_results($querystr, OBJECT);
 					
-					$recent = $pageposts[0];
-					
 					$counter = 1;
 					
 					if(count($pageposts) == 0){
@@ -126,6 +128,8 @@
 								<tr><td>No Submissions Yet</td></tr><?PHP
 					
 					}else{
+					
+						$recent = $pageposts[0];
 					
 						foreach($pageposts as $page){
 							
@@ -410,35 +414,7 @@
 					}
 					
 					$current_user = wp_get_current_user();
-
-					$args = array(
-								'posts_per_page'   => 9999999,
-								'orderby'          => 'post_title',
-								'order'            => 'ASC',
-								'post_type'        => 'lrnode',
-								'post_status'      => 'publish',
-								'suppress_filters' => true 
-							);
-					$nodes = get_posts( $args );
-					$args = array(
-								'posts_per_page'   => 9999999,
-								'orderby'          => 'post_title',
-								'order'            => 'ASC',
-								'post_type'        => 'lrschema',
-								'post_status'      => 'publish',
-								'suppress_filters' => true 
-							);
-					$schemas = get_posts( $args );
-					
-					if(count($nodes)!=0 && count($schemas)!=0){
-
-						echo "<a class='button button-primary button-large' onclick='javascript:lrp_submit(" . $this_post, ", " . $current_user->ID . ", false, true)'>Submit Document</a>";
-
-					}else{
-
-						echo "You need to create a node and a schema before publishing";
-			
-					}
+					echo "<a class='button button-primary button-large' onclick='javascript:lrp_submit(" . $this_post, ", " . $current_user->ID . ", false, true)'>Submit Document</a>";
 				}
 				
 			}

@@ -97,10 +97,12 @@
 				}
 			}else{
 				global $post;
-				if($post->post_type=="lrschema"){
-					remove_action( 'media_buttons', 'media_buttons' );
-					add_filter( 'user_can_richedit' , '__return_false', 50 );	
-					add_meta_box( "lrschema", __("Schema Settings"), array($this, "editor_meta_box"), "lrschema");
+				if(isset($post)){
+					if($post->post_type=="lrschema"){
+						remove_action( 'media_buttons', 'media_buttons' );
+						add_filter( 'user_can_richedit' , '__return_false', 50 );	
+						add_meta_box( "lrschema", __("Schema Settings"), array($this, "editor_meta_box"), "lrschema");
+					}
 				}
 			}
 		}

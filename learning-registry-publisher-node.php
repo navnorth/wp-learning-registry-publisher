@@ -21,13 +21,15 @@
 		function post_title( $title, $id = null ) {
 
 			if(is_admin()){
-				global $wp;
-				$current_url = add_query_arg( $wp->query_string, '', home_url( $wp->request ) );
-				if(strpos($current_url, "edit.php")!==FALSE && $_GET['post_type']=="lrnode"){
-					if(get_option("lrnode_default")){
-						$default_node = get_option("lrnode_default");
-						if($id == $default_node){
-							$title = "DEFAULT NODE - " . $title;
+				if(isset($_GET['post_type'])){
+					global $wp;
+					$current_url = add_query_arg( $wp->query_string, '', home_url( $wp->request ) );
+					if(strpos($current_url, "edit.php")!==FALSE && $_GET['post_type']=="lrnode"){
+						if(get_option("lrnode_default")){
+							$default_node = get_option("lrnode_default");
+							if($id == $default_node){
+								$title = "DEFAULT NODE - " . $title;
+							}
 						}
 					}
 				}
@@ -37,24 +39,26 @@
 		
 		function post_order($posts){
 			if(is_admin()){
-				global $wp;
-				$current_url = add_query_arg( $wp->query_string, '', home_url( $wp->request ) );
-				if(strpos($current_url, "edit.php")!==FALSE && $_GET['post_type']=="lrnode"){
-					if(get_option("lrnode_default")){
-						$default_node = get_option("lrnode_default");
-						$unset = false;
-						foreach($posts as $id => $post){
-							if($post->ID == $default_node){
-								unset($posts[$id]);
-								$unset = true;
+				if(isset($_GET['post_type'])){
+					global $wp;
+					$current_url = add_query_arg( $wp->query_string, '', home_url( $wp->request ) );
+					if(strpos($current_url, "edit.php")!==FALSE && $_GET['post_type']=="lrnode"){
+						if(get_option("lrnode_default")){
+							$default_node = get_option("lrnode_default");
+							$unset = false;
+							foreach($posts as $id => $post){
+								if($post->ID == $default_node){
+									unset($posts[$id]);
+									$unset = true;
+								}
 							}
+							array_unshift($posts, get_post($default_node));
+							if(!$unset){
+								array_pop($posts);
+							}
+							$posts = array_filter($posts);
+							
 						}
-						array_unshift($posts, get_post($default_node));
-						if(!$unset){
-							array_pop($posts);
-						}
-						$posts = array_filter($posts);
-						
 					}
 				}
 			}

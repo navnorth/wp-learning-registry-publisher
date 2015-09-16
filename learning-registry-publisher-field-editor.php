@@ -28,9 +28,11 @@
 				}
 			}else{
 				global $post;
-				if($post->post_type=="lrfield"){
-					echo "<p>What ever the title is, will be replaced by what you type below when you use %NAME OF FIELD% in a schema - where NAME OF FIELD is the title of the document</p>";
-					echo "<p>The following are reserved LINK, TITLE, CONTENT, KEYWORDS and DATE</p>";				
+				if(isset($post)){	
+					if($post->post_type=="lrfield"){
+						echo "<p>What ever the title is, will be replaced by what you type below when you use %NAME OF FIELD% in a schema - where NAME OF FIELD is the title of the document</p>";
+						echo "<p>The following are reserved LINK, TITLE, CONTENT, KEYWORDS and DATE</p>";				
+					}
 				}
 			}
 		}
@@ -58,9 +60,11 @@
 				}
 			}else{
 				global $post;
-				if($post->post_type=="lrfield"){
-					remove_action( 'media_buttons', 'media_buttons' );
-					add_filter( 'user_can_richedit' , '__return_false', 50 );	
+				if(isset($post)){	
+					if($post->post_type=="lrfield"){
+						remove_action( 'media_buttons', 'media_buttons' );
+						add_filter( 'user_can_richedit' , '__return_false', 50 );	
+					}
 				}
 			}
 		}
