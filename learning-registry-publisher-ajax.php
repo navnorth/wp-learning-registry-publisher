@@ -178,8 +178,6 @@ class LearningRegistryPublisherAjax{
 			
 			$submit->LR->createDocument();
 			
-			print_r($submit->LR->getResourceData());
-			
 			if($signing){
 				$submit->LR->signDocument();
 			}
