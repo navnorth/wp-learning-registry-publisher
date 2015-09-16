@@ -258,9 +258,37 @@
 				echo "<td>" . $page->post_type;
 				echo "<a class='lrfilter' href='" . $current_url . "&post_type_filter=" . $page->post_type . "'>filter</a>";
 				echo "</td>";
-				echo "<td><div class='lrp_submit'>" . str_replace("$$$", $page->ID, $output);
+				echo "<td><div class='lrp_submit'>" . str_replace("$$$", $page->ID, $output) . "</div>";
 				$current_user = wp_get_current_user();
-				echo "</div><button class='button button-primary button-large' onclick='javascript:lrp_submit(" . $page->ID, ", " . $current_user->ID . ", true, false)'>Submit Document</button>";
+
+				$args = array(
+							'posts_per_page'   => 9999999,
+							'orderby'          => 'post_title',
+							'order'            => 'ASC',
+							'post_type'        => 'lrnode',
+							'post_status'      => 'publish',
+							'suppress_filters' => true 
+						);
+				$nodes = get_posts( $args );
+				$args = array(
+							'posts_per_page'   => 9999999,
+							'orderby'          => 'post_title',
+							'order'            => 'ASC',
+							'post_type'        => 'lrschema',
+							'post_status'      => 'publish',
+							'suppress_filters' => true 
+						);
+				$schemas = get_posts( $args );
+					
+				if(count($nodes)!=0 && count($schemas)!=0){
+
+					echo "<button class='button button-primary button-large' onclick='javascript:lrp_submit(" . $page->ID, ", " . $current_user->ID . ", true, false)'>Submit Document</button>";
+
+				}else{
+
+					echo "You need to create a node and a schema before publishing";
+			
+				}
 				echo "</td>";
 				echo "</tr>";
 					
