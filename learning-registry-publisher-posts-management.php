@@ -255,14 +255,17 @@
 				
 				?>
 					</tbody>
-				</table> 
+				</table>
+				<?php if(strpos($post->post_type,"lr")){ ?>
 				<script type="text/javascript" language="javascript">
 					jQuery(document).ready(function() 
 						{ 
 							jQuery("#myTable").tablesorter(); 
 						} 
 					);
-				</script><?PHP
+				</script>
+				<?php } ?>
+				<?PHP
 					
 				}
 				
