@@ -9,7 +9,7 @@
 		
 		function enqueue_scripts(){
 			if(isset($_GET['page'])){
-				if(strpos($_GET['page'],"lrp_manage_documents")!==0 || strpos($_GET['page'],"lrp_unsubmitted_resources")!==0 ){
+				if(strpos($_GET['page'],"lrp_manage_documents") || strpos($_GET['page'],"lrp_unsubmitted_resources") ){
 					wp_enqueue_script("jquery");
 					wp_enqueue_style('lrp_tabs_css', plugins_url('/css/lrp_tabs.css', __FILE__));
 					wp_enqueue_script('lrp_table_sort', plugins_url('/js/jquery.tablesorter.min.js', __FILE__), array("jquery"), '1.0.0', true );
