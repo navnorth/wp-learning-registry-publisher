@@ -22,7 +22,7 @@
 			}else{
 				global $post;
 				if(isset($post)){
-					if(strpos($post->post_type,"lr")!==0){
+					if(strpos($post->post_type,"lr")){
 						if(current_user_can("LearningRegistryPublisherHistory") || current_user_can("LearningRegistryPubliisherManageDocument")){
 							wp_enqueue_script("jquery");
 							wp_enqueue_script("jquery-ui-tabs");

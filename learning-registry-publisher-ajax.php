@@ -11,7 +11,7 @@ class LearningRegistryPublisherAjax{
 	}
 	
 	function display_js() {
-	
+		
 		wp_enqueue_script('lrp_submit_ajax', plugins_url('/js/lrp_submit.js', __FILE__), array(), '1.0.0', true );
 		wp_localize_script('lrp_submit_ajax', 'lrp_submit_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'answerNonce' => wp_create_nonce( 'lrp_submit_js_nonce' ) ) );
 		
