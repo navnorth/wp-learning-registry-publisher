@@ -158,7 +158,11 @@
 				
 				$sign = get_post_meta(get_option("lrnode_default"), "lrnode_sign", true); 
 				
-				if($sign){
+				$key_disabled = "";
+					
+				if ($sign)
+					$key_disabled = "disabled";
+				//if($sign){
 				
 					if(get_option("lrkey_default")){
 					
@@ -174,13 +178,16 @@
 							);
 							$posts = get_posts( $args );
 							
-							$output .= "<p>Choose Key : <select id='lrkey_$$$'><option>Select a key</option>";
+							$output .= "<p>Choose Key : <select id='lrkey_$$$'" . $key_disabled . "><option>Select a key</option>";
 							foreach($posts as $post){
 								$output .='<option ';
 								if(get_option("lrkey_default")==$post->ID){ $output .= " selected='true' "; }
 								$output .= 'value="' . $post->ID . '">' . $post->post_title . "</option>";
 							}
 							$output .= "</select></p>";
+							if (empty($posts)) {
+								$output .= '<input id="lrkey_$$$" type="hidden" value="0" />';
+							}
 						
 						}else{
 							$output .= '<input id="lrkey_$$$" type="hidden" value="' . get_option("lrkey_default") . " />";
@@ -198,19 +205,21 @@
 							);
 							$posts = get_posts( $args );
 							
-							$output .= "<p>Choose Key : <select id='lrkey_$$$'><option>Select a key</option>";
+							$output .= "<p>Choose Key : <select id='lrkey_$$$'" . $key_disabled . "><option>Select a key</option>";
 							foreach($posts as $post){
 								$output .='<option ';
 								if(get_option("lrkey_default")==$post->ID){ $output .= " selected='true' "; }
 								$output .= 'value="' . $post->ID . '">' . $post->post_title . "</option>";
 							}
 							$output .= "</select></p>";
-					
+						if (empty($posts)) {
+							$output .= '<input id="lrkey_$$$" type="hidden" value="0" />';
+						}
 					}
 
-				}else{
-					$output .= '<input id="lrkey_$$$" type="hidden" value="0" />';
-				}
+				//}else{
+				//	$output .= '<input id="lrkey_$$$" type="hidden" value="0" />';
+				//}
 				
 			}
 			

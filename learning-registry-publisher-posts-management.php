@@ -366,8 +366,11 @@
 					
 					$sign = get_post_meta(get_option("lrnode_default"), "lrnode_sign", true); 
 					
-					if($sign){
+					$key_disabled = "";
 					
+					if ($sign)
+						$key_disabled = "disabled";
+						
 						if(get_option("lrkey_default")){
 						
 							if(current_user_can("LearningRegistryPublisherOverrideDefaults")){
@@ -382,11 +385,19 @@
 								);
 								$posts = get_posts( $args );
 								
-								?><p>Choose key : <select id="lrkey"><option>Select a Key</option><?PHP
+								?><p>Choose key : <select id="lrkey" <?php echo $key_disabled; ?>><option>Select a Key</option><?PHP
 								foreach($posts as $post){
 									?><option <?PHP if(get_option("lrkey_default")==$post->ID){ echo " selected='true' "; } ?> value="<?PHP echo $post->ID; ?>"><?PHP echo $post->post_title; ?></option><?PHP
 								}
-								?></select></p><p>If you don't select a key it will be an unsigned submission</p><?PHP
+								?></select></p>
+								<?php
+								if (empty($posts)) {
+									?>
+									<input id="lrkey" type="hidden" value="0" />
+									<?php
+								}
+								?>
+								<p>If you don't select a key it will be an unsigned submission</p><?PHP
 							
 							}else{
 								?><input id="lrkey" type="hidden" value="<?PHP echo get_option("lrkey_default"); ?>" /><?PHP
@@ -404,17 +415,22 @@
 								);
 								$posts = get_posts( $args );
 								
-								?><p>Choose key : <select id="lrkey"><option>Select a Key</option><?PHP
+								?><p>Choose key : <select id="lrkey" <?php echo $key_disabled; ?>><option>Select a Key</option><?PHP
 								foreach($posts as $post){
 									?><option value="<?PHP echo $post->ID; ?>"><?PHP echo $post->post_title; ?></option><?PHP
 								}
-								?></select></p><p>If you don't select a key it will be an unsigned submission</p><?PHP
+								?></select></p>
+								<?php
+								if (empty($posts)) {
+									?>
+									<input id="lrkey" type="hidden" value="0" />
+									<?php
+								}
+								?>
+								<p>If you don't select a key it will be an unsigned submission</p><?PHP
 						
 						}
 						
-					}else{
-						?><input id="lrkey" type="hidden" value="0" /><?PHP
-					}
 					
 					$current_user = wp_get_current_user();
 					echo "<a class='button button-primary button-large' onclick='javascript:lrp_submit(" . $this_post, ", " . $current_user->ID . ", false, true)'>Submit Document</a>";
