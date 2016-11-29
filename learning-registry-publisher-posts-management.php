@@ -368,7 +368,7 @@
 					
 					$key_disabled = "";
 					
-					if ($sign)
+					if (!$sign)
 						$key_disabled = "disabled";
 						
 						if(get_option("lrkey_default")){

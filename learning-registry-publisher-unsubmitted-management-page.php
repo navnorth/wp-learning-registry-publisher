@@ -160,9 +160,8 @@
 				
 				$key_disabled = "";
 					
-				if ($sign)
+				if (!$sign)
 					$key_disabled = "disabled";
-				//if($sign){
 				
 					if(get_option("lrkey_default")){
 					
@@ -205,7 +204,7 @@
 							);
 							$posts = get_posts( $args );
 							
-							$output .= "<p>Choose Key : <select id='lrkey_$$$'" . $key_disabled . "><option>Select a key</option>";
+							$output .= "<p>Choose Key : <select id='lrkey_$$$'" . $key_disabled . "><option value='0'>Select a key</option>";
 							foreach($posts as $post){
 								$output .='<option ';
 								if(get_option("lrkey_default")==$post->ID){ $output .= " selected='true' "; }
@@ -216,10 +215,6 @@
 							$output .= '<input id="lrkey_$$$" type="hidden" value="0" />';
 						}
 					}
-
-				//}else{
-				//	$output .= '<input id="lrkey_$$$" type="hidden" value="0" />';
-				//}
 				
 			}
 			

@@ -133,22 +133,30 @@ class LearningRegistryPublisherAjax{
 	function submit_to_lr(){
 	
 		if(wp_verify_nonce($_REQUEST['nonce'], 'lrp_submit_js_nonce')){
-		
+			//check if sign is on
+			$sign = get_post_meta($_POST['node'], "lrnode_sign", true);
+			
 			$date = date("G:i:s F, jS Y", time());
 			$node = get_post($_POST['node']);
 			$post = get_post($_POST['post']);
+			
+			if ($sign && (intval($_POST['key'])===0)){
+				echo json_encode( array( 'error' => 'Please select a key' ));
+				die();
+			}
+			
 			$key = get_post($_POST['key']);
 			$schema = get_post($_POST['schema']);
 			$this->prepare_schema($_POST['post'], $schema);
 			$submit = new LearningRegistryPublisherSubmit();
 			$submit->initialise( 
-									get_post_meta($node->ID, "lrnode_url", true), 
-									get_post_meta($node->ID, "lrnode_username", true), 
-									get_post_meta($node->ID, "lrnode_https", true), 
-									get_post_meta($node->ID, "lrnode_password", true),
-									$signing,
-									get_post_meta($node->ID, "lrnode_oauthsig")
-								);
+				get_post_meta($node->ID, "lrnode_url", true), 
+				get_post_meta($node->ID, "lrnode_username", true), 
+				get_post_meta($node->ID, "lrnode_https", true), 
+				get_post_meta($node->ID, "lrnode_password", true),
+				$signing,
+				get_post_meta($node->ID, "lrnode_oauthsig")
+			);
 			$signing = false;
 			if(get_post_meta($node->ID, "lrnode_sign", true)=="on"){
 				$signing = true;
