@@ -275,8 +275,10 @@
 				
 					echo "<h3 id='lrp_submit'>Submit Document</h3>";
 		
+					$signon = "";
+		
 					if(get_option("lrnode_default")){
-					
+						
 						if(current_user_can("LearningRegistryPublisherOverrideDefaults")){
 					
 							$args = array(
@@ -289,9 +291,14 @@
 							);
 							$posts = get_posts( $args );
 							
-							?><p>Choose Node : <select id="lrnode"><option>Select a Node</option><?PHP
+							?><p>Choose Node : <select id="lrnode" onchange="javascript:select_update('#lrnode');"><option>Select a Node</option><?PHP
 							foreach($posts as $post){
-								?><option <?PHP if(get_option("lrnode_default")==$post->ID){ echo " selected='true' "; } ?> value="<?PHP echo $post->ID; ?>"><?PHP echo $post->post_title; ?></option><?PHP
+								$sign_status = get_post_meta($post->ID, "lrnode_sign", true);
+								if ($sign_status)
+									$signon = 'data-signing="true"';
+								else
+									$signon = "";
+								?><option <?PHP if(get_option("lrnode_default")==$post->ID){ echo " selected='true' "; } ?> value="<?PHP echo $post->ID; ?>" <?php echo $signon; ?>><?PHP echo $post->post_title; ?></option><?PHP
 							}
 							?></select></p><?PHP
 						
@@ -313,7 +320,12 @@
 							
 							?><p>Choose Node : <select id="lrnode"><option>Select a node</option><?PHP
 							foreach($posts as $post){
-								?><option value="<?PHP echo $post->ID; ?>"><?PHP echo $post->post_title; ?></option><?PHP
+								$sign_status = get_post_meta($post->ID, "lrnode_sign", true);
+								if ($sign_status)
+									$signon = 'data-signing="true"';
+								else
+									$signon = "";
+								?><option value="<?PHP echo $post->ID; ?>" <?php echo $signon; ?>><?PHP echo $post->post_title; ?></option><?PHP
 							}
 							?></select></p><?PHP
 					

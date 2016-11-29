@@ -114,3 +114,12 @@ function lrp_submit_options(event){
 			)
 	}
 }
+
+function select_update(select) {
+	var signing = jQuery('option:selected', jQuery(select)).attr('data-signing');
+	if (typeof signing == typeof undefined || signing == false) {
+		jQuery('select#lrkey').attr('disabled','disabled');
+	} else {
+		jQuery('select#lrkey').removeAttr('disabled');
+	}
+}

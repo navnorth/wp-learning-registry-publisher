@@ -27,7 +27,7 @@ class LearningRegistryPublisherAjax{
 		$this->keywords = array();
 		$tags = wp_get_post_tags($post_id);
 		foreach($tags as $tag){
-			array_push($this->keywords, $tags[$tag]->name);
+			array_push($this->keywords, $tag->name);
 		}
 		$categories = wp_get_post_categories($post_id);
 		foreach($categories as $category){
@@ -132,82 +132,87 @@ class LearningRegistryPublisherAjax{
 	
 	function submit_to_lr(){
 	
-		if(wp_verify_nonce($_REQUEST['nonce'], 'lrp_submit_js_nonce')){
-			//check if sign is on
-			$sign = get_post_meta($_POST['node'], "lrnode_sign", true);
-			
-			$date = date("G:i:s F, jS Y", time());
-			$node = get_post($_POST['node']);
-			$post = get_post($_POST['post']);
-			
-			if ($sign && (intval($_POST['key'])===0)){
-				echo json_encode( array( 'error' => 'Please select a key' ));
-				die();
-			}
-			
-			$key = get_post($_POST['key']);
-			$schema = get_post($_POST['schema']);
-			$this->prepare_schema($_POST['post'], $schema);
-			$submit = new LearningRegistryPublisherSubmit();
-			$submit->initialise( 
-				get_post_meta($node->ID, "lrnode_url", true), 
-				get_post_meta($node->ID, "lrnode_username", true), 
-				get_post_meta($node->ID, "lrnode_https", true), 
-				get_post_meta($node->ID, "lrnode_password", true),
-				$signing,
-				get_post_meta($node->ID, "lrnode_oauthsig")
-			);
-			$signing = false;
-			if(get_post_meta($node->ID, "lrnode_sign", true)=="on"){
-				$signing = true;
-				$key_post = get_post($key->ID);
-				$submit->LRConfig->setPublicKeyPath(get_post_meta($key->ID, "lrkey_url", true));
-				$submit->LRConfig->setPassphrase(get_post_meta($key->ID, "lrkey_passphrase", true));
-				$submit->LRConfig->setKeyContents($key_post->post_content);
-			}
-			$submit->LRDocument->setIdFields(
-				array(
-				'curator' => get_post_meta($node->ID, "lrnode_doccurator", true),
-				'owner' => get_post_meta($node->ID, "lrnode_docowner", true),
-				'signer' => get_post_meta($key->ID, "lrkey_signer", true),
-				'submitter_type' => get_post_meta($node->ID, "lrnode_docsubmittertype", true),
-				'submitter' => get_post_meta($node->ID, "lrnode_docsubmitter", true)
-				)
-			);	
-			
-			$submit->LRDocument->setResFields(
-				array(
-				'payload_schema' => array(get_post_meta($schema->ID, "lrschema_payload", true)), 
-				'resource_locator' => $post->guid, 
-				'keys' => $this->keywords, 
-				'resource_data' => htmlspecialchars_decode($this->content), 
-				)
-			);
-			
-			$submit->LR->createDocument();
-			
-			if($signing){
-				$submit->LR->signDocument();
-			}
-			
-			if($signing){
-				$submit->LR->verifySignedDocument();
-			}
-			
-			if ($submit->LR->verifyDocument()) {
-				$submit->LR->finaliseDocument();
-				$submit->LR->PublishService();
-				if ($submit->LR->getDocumentOK()!="1") {
-					echo json_encode( array("error" => $submit->LR->getError() ) );
-				} else {
-					$this->prepare_response($submit->LR->getDocID(), $node, $key, $schema, $user, $date);
+		try{
+			if(wp_verify_nonce($_REQUEST['nonce'], 'lrp_submit_js_nonce')){
+				//check if sign is on
+				$sign = get_post_meta($_POST['node'], "lrnode_sign", true);
+				
+				$date = date("G:i:s F, jS Y", time());
+				$node = get_post($_POST['node']);
+				$post = get_post($_POST['post']);
+				
+				if ($sign && (intval($_POST['key'])===0)){
+					echo json_encode( array( 'error' => 'Please select a key' ));
+					die();
 				}
-			}else{
-				echo json_encode( array("error" => $submit->LR->errors ) );
+				
+				$key = get_post($_POST['key']);
+				$schema = get_post($_POST['schema']);
+				$this->prepare_schema($_POST['post'], $schema);
+				
+				$submit = new LearningRegistryPublisherSubmit();
+				$submit->initialise( 
+					get_post_meta($node->ID, "lrnode_url", true), 
+					get_post_meta($node->ID, "lrnode_username", true), 
+					get_post_meta($node->ID, "lrnode_https", true), 
+					get_post_meta($node->ID, "lrnode_password", true),
+					$signing,
+					get_post_meta($node->ID, "lrnode_oauthsig")
+				);
+				
+				$signing = false;
+				if(get_post_meta($node->ID, "lrnode_sign", true)=="on"){
+					$signing = true;
+					$key_post = get_post($key->ID);
+					$submit->LRConfig->setPublicKeyPath(get_post_meta($key->ID, "lrkey_url", true));
+					$submit->LRConfig->setPassphrase(get_post_meta($key->ID, "lrkey_passphrase", true));
+					$submit->LRConfig->setKeyContents($key_post->post_content);
+				}
+				$submit->LRDocument->setIdFields(
+					array(
+					'curator' => get_post_meta($node->ID, "lrnode_doccurator", true),
+					'owner' => get_post_meta($node->ID, "lrnode_docowner", true),
+					'signer' => get_post_meta($key->ID, "lrkey_signer", true),
+					'submitter_type' => get_post_meta($node->ID, "lrnode_docsubmittertype", true),
+					'submitter' => get_post_meta($node->ID, "lrnode_docsubmitter", true)
+					)
+				);	
+				
+				$submit->LRDocument->setResFields(
+					array(
+					'payload_schema' => array(get_post_meta($schema->ID, "lrschema_payload", true)), 
+					'resource_locator' => $post->guid, 
+					'keys' => $this->keywords, 
+					'resource_data' => htmlspecialchars_decode($this->content), 
+					)
+				);
+				
+				$submit->LR->createDocument();
+				
+				if($signing){
+					$submit->LR->signDocument();
+				}
+				
+				if($signing){
+					$submit->LR->verifySignedDocument();
+				}
+				
+				if ($submit->LR->verifyDocument()) {
+					$submit->LR->finaliseDocument();
+					$submit->LR->PublishService();
+					if ($submit->LR->getDocumentOK()!="1") {
+						echo json_encode( array("error" => $submit->LR->getError() ) );
+					} else {
+						$this->prepare_response($submit->LR->getDocID(), $node, $key, $schema, $user, $date);
+					}
+				}else{
+					echo json_encode( array("error" => $submit->LR->errors ) );
+				}
+			
 			}
-		
+		} catch(Exception $e) {
+			echo json_encode( array("error" => $e->getMessage() ) );
 		}
-		
 		die();
 		
 	}
