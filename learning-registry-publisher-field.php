@@ -57,10 +57,10 @@
 		function create(){
 	
 			$labels = array(
-				'name' => 'Learning Registry Field',
+				'name' => 'Metadata Fields',
 				'singular_name' => 'Learning Registry Field',
-				'add_new' => 'Add new Learning Registry Field',
-				'add_new_item' => 'Add Learning Registry Field',
+				'add_new' => 'Add Metadata Field',
+				'add_new_item' => 'Add Metadata Field',
 				'edit_item' => 'Edit Learning Registry Field',
 				'new_item' => 'New Learning Registry Field',
 				'all_items' => 'All Learning Registry Fields',
@@ -107,18 +107,17 @@
 			
 			$submenu['edit.php?post_type=lrnode'][12] = Array
                 (
-                    0 => "All Fields",
+                    0 => "Metadata Fields",
                     1 => "edit_lrfields",
                     2 => "edit.php?post_type=lrfield"
                 );
 				
-			$submenu['edit.php?post_type=lrnode'][15] = Array
+			/*$submenu['edit.php?post_type=lrnode'][15] = Array
                 (
                     0 => "Add new field",
                     1 => "edit_lrfields",
                     2 => "post-new.php?post_type=lrfield"
-                );
-			
+                );*/
 		}
 	
 	}
