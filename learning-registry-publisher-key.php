@@ -116,9 +116,9 @@
 		function create(){
 		
 			$labels = array(
-				'name' => 'Learning Registry PGP Key',
+				'name' => 'PGP Signing Keys',
 				'singular_name' => 'Learning Registry PGP Key',
-				'add_new' => 'Add new',
+				'add_new' => 'Add PGP Signing Key',
 				'add_new_item' => 'Add Learning Registry PGP Key',
 				'edit_item' => 'Edit Learning Registry PGP Key',
 				'new_item' => 'New Learning Registry PGP Key',
@@ -166,17 +166,17 @@
 			
 			$submenu['edit.php?post_type=lrnode'][45] = Array
                 (
-                    0 => "All Keys",
+                    0 => "PGP Signing Keys",
                     1 => "edit_lrkey",
                     2 => "edit.php?post_type=lrkey"
                 );
 				
-			$submenu['edit.php?post_type=lrnode'][50] = Array
+			/*$submenu['edit.php?post_type=lrnode'][50] = Array
                 (
                     0 => "Add new key",
                     1 => "edit_lrkey",
                     2 => "post-new.php?post_type=lrkey"
-                );
+                );*/
 			
 		}
 	
