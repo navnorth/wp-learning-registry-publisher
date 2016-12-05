@@ -122,7 +122,7 @@
 				'add_new_item' => 'Add Learning Registry Node',
 				'edit_item' => 'Edit Learning Registry Node',
 				'new_item' => 'New Learning Registry Node',
-				'all_items' => 'All Learning Registry Nodes',
+				'all_items' => 'Learning Registry Nodes',
 				'view_item' => 'View Learning Registry Nodes',
 				'search_items' => 'Search Learning Registry Node',
 				'not_found' =>  'No Learning Registry Nodes found',
@@ -162,6 +162,8 @@
 				}
 			}
 			
+			//Remove Add New Learning Registry Node from side menu
+			unset($submenu['edit.php?post_type=lrnode'][10]);
 		}
 	
 	}
