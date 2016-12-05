@@ -115,10 +115,10 @@
 		function create(){
 		
 			$labels = array(
-				'name' => 'Learning Registry Schema',
+				'name' => 'Metadata Schemas',
 				'singular_name' => 'Learning Registry Schema',
-				'add_new' => 'Add new',
-				'add_new_item' => 'Add Learning Registry Schema',
+				'add_new' => 'Add Metadata Schema',
+				'add_new_item' => 'Add Metadata Schema',
 				'edit_item' => 'Edit Learning Registry Schema',
 				'new_item' => 'New Learning Registry Schema',
 				'all_items' => 'All Learning Registry Schemas',
@@ -182,17 +182,17 @@
 			
 			$submenu['edit.php?post_type=lrnode'][30] = Array
                 (
-                    0 => "All Schemas",
+                    0 => "Metadata Schemas",
                     1 => "edit_lrschemas",
                     2 => "edit.php?post_type=lrschema"
                 );
 				
-			$submenu['edit.php?post_type=lrnode'][35] = Array
+			/*$submenu['edit.php?post_type=lrnode'][35] = Array
                 (
                     0 => "Add new schema",
                     1 => "edit_lrschemas",
                     2 => "post-new.php?post_type=lrschema"
-                );
+                );*/
 			
 		}
 	
