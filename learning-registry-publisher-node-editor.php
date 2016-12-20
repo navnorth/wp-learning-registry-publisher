@@ -10,6 +10,7 @@
 			add_action( "admin_notices", array($this, "test_results") );
 			add_action( "trash_lrnode", array($this, "trash_node") );
 			add_filter( 'enter_title_here', array($this, 'custom_enter_title') );
+			add_action( 'admin_enqueue_scripts', array($this, 'load_lr_scripts'));
 		}
 		
 		function test_results(){
@@ -108,7 +109,10 @@
 				$sign = get_post_meta($post->ID, "lrnode_sign", true); 
 			?>
 			<p>Use HTTPS <input type="checkbox" name="lrnode_https" <?PHP if(($https)){ echo " checked "; } ?>  /></p>
-			<p>Sign documents <input type="checkbox" name="lrnode_sign"  <?PHP if(($sign)){ echo " checked "; } ?>  /></p>
+			<p>Sign documents:</p>
+			<p><input type="radio" class="lrnode_sign" name="lrnode_sign" value="0"  <?PHP if(($sign=="0")){ echo " checked "; } ?>  /> <span class="lrnode_radio_label">node-based signing</span>
+			<input type="radio" class="lrnode_sign" name="lrnode_sign" value="1"  <?PHP if(($sign=="1")){ echo " checked "; } ?>  /> <span class="lrnode_radio_label">local document signing -- <i>requires PGP Key setup</i></span>
+			</p>
 			<p>Default Node <input type="checkbox" name="lrnode_default"  <?PHP if(get_option("lrnode_default")==$post->ID){ echo " checked "; } ?>  /></p>
 			<?PHP
 		
@@ -137,6 +141,10 @@
 			if(get_option("lrnode_default")==$post_id){
 				delete_option("lrnode_default");
 			}
+		}
+		
+		function load_lr_scripts() {
+			wp_enqueue_style( 'lr-back-styles', LR_URL.'css/back_styles.css');
 		}
 	
 	}

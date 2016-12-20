@@ -6,6 +6,8 @@
 	Version: 0.1
 */
 
+define( 'LR_URL', plugin_dir_url(__FILE__) );
+
 require_once("learning-registry-publisher-user-fields.php");
 require_once("learning-registry-publisher-field.php");
 require_once("learning-registry-publisher-field-editor.php");

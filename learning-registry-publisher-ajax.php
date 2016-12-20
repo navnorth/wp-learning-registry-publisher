@@ -71,7 +71,7 @@ class LearningRegistryPublisherAjax{
 														)
 													);
 			
-			if(get_post_meta($node->ID, "lrnode_sign", true)=="on"){
+			if(get_post_meta($node->ID, "lrnode_sign", true)=="1"){
 				$signing = true;
 				$key_post = get_post($key->ID);
 				$submit->LRConfig->setPublicKeyPath(get_post_meta($key->ID, "lrkey_url", true));
@@ -161,7 +161,7 @@ class LearningRegistryPublisherAjax{
 				);
 				
 				$signing = false;
-				if(get_post_meta($node->ID, "lrnode_sign", true)=="on"){
+				if(get_post_meta($node->ID, "lrnode_sign", true)=="1"){
 					$signing = true;
 					$key_post = get_post($key->ID);
 					$submit->LRConfig->setPublicKeyPath(get_post_meta($key->ID, "lrkey_url", true));
