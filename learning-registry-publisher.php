@@ -1,10 +1,31 @@
 <?php
-
 /*
-	Plugin Name: Learning Registry Publisher
-	Description: A tool for publishing to the Learning Registry on WordPress
-	Version: 0.1
-*/
+ Plugin Name:  Learning Registry Publisher
+ Plugin URI:   https://www.navigationnorth.com/solutions/wordpress/learning-registry-publisher-plugin
+ Description:  A tool for publishing to the Learning Registry on WordPress
+ Version:      0.1.5
+ Author:       Navigation North, Pat Lockley
+ Author URI:   https://www.navigationnorth.com
+ Text Domain:  learning-registry-publisher
+ License:      GPL3
+ License URI:  https://www.gnu.org/licenses/gpl-3.0.html
+
+ Copyright (C) 2017 Navigation North
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ */
 
 define( 'LR_URL', plugin_dir_url(__FILE__) );
 
@@ -28,9 +49,9 @@ require_once("learning-registry-publisher-post-columns.php");
 class LearningRegistryPublisher{
 
 	var $AdministratorCapabilities = array(
-								'LearningRegistryPublisherManage', 
-								'LearningRegistryPublisherSchema', 
-								'LearningRegistryPublisherKeys', 
+								'LearningRegistryPublisherManage',
+								'LearningRegistryPublisherSchema',
+								'LearningRegistryPublisherKeys',
 								'LearningRegistryPublisherHistory',
 								'LearningRegistryPublisherManageDocument',
 								'edit_lrnode',
@@ -90,8 +111,8 @@ class LearningRegistryPublisher{
 								'edit_published_lrfields',
 								'edit_lrfields',
 								'LearningRegistryPublisherOverrideDefaults'
-							);			
-	
+							);
+
 	var $FieldCapabilities = array(
 								'edit_lrfield',
 								'read_lrfield',
@@ -108,7 +129,7 @@ class LearningRegistryPublisher{
 								'edit_published_lrfields',
 								'edit_lrfields'
 							);
-						
+
 	var $SchemaCapabilities = array(
 								'edit_lrschema',
 								'read_lrschema',
@@ -125,7 +146,7 @@ class LearningRegistryPublisher{
 								'edit_published_lrschemas',
 								'edit_lrschemas'
 							);
-							
+
 	var $KeyCapabilities = array(
 								'edit_lrkey',
 								'read_lrkey',
@@ -142,21 +163,21 @@ class LearningRegistryPublisher{
 								'edit_published_lrkeys',
 								'edit_lrkeys'
 							);
-							
+
 	var $AuthorCapabilities = array(
 								'LearningRegistryPublisherHistory'
 							);
-							
+
 	function __construct(){
-		
-		$this->EditorCapabilities = array_merge($this->AuthorCapabilities, $this->SchemaCapabilities, $this->FieldCapabilities); 
-	
+
+		$this->EditorCapabilities = array_merge($this->AuthorCapabilities, $this->SchemaCapabilities, $this->FieldCapabilities);
+
 	}
 
 	function activate(){
-		
+
 		global $wpdb;
-		
+
 		if(!get_option("lrp_database_establish")){
 
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -175,15 +196,15 @@ class LearningRegistryPublisher{
 				  date_submitted bigint(20),
 				  UNIQUE KEY id(id)
 				);";
-			
+
 			dbDelta($sql);
-				
+
 			add_option("lrp_database_establish", 1);
-			
+
 		}
-		
+
 		$get_users = get_users();
-		
+
 		foreach ( $get_users as $user )
 		{
 			if(in_array("administrator", $user->roles)){
